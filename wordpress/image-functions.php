@@ -23,20 +23,27 @@ function ejo_get_all_image_sizes()
 }
 
 /**
- * Get image height
+ * Usable way to get Image Data
+ *
+ * @param: Attachment ID, image-size 
+ * @return: array or false
  */
-function ejo_get_image_dimensions( $image_id, $image_size = 'full' )
+function ejo_get_image( $image_id, $image_size = 'full' )
 {
-	$image = wp_get_attachment_image_src( $image_id , $image_size );
+	/* Get image */
+	$wp_image_data = wp_get_attachment_image_src( $image_id , $image_size );
 
-	if ( !$image )
+	/* Stop if no image could be found */
+	if ( !$wp_image_data )
 		return false;
 
-	$image_dimensions = array();
-	$image_dimensions['width'] = $image[1];
-	$image_dimensions['height'] = $image[2];
-	$image_dimensions['src'] = $image[0];
-	$image_dimensions['id'] = $image_id;
+	/* Setup usable image data */
+	$image = array();
+	$image['id'] = $image_id;
+	$image['src'] = $wp_image_data[0];
+	$image['size'] = $image_size;
+	$image['width'] = $wp_image_data[1];
+	$image['height'] = $wp_image_data[2];
 
-	return $image_dimensions;
+	return $image;
 }	
