@@ -15,7 +15,7 @@
  * - require_if_theme_supports( 'feature', path );
  * - if (current_theme_supports( 'feature', 'item1' ))
  */
-function ejo_add_extended_theme_support($extended_theme_support = true, $checked_arg = array(), $theme_support_args = true)
+function ejo_add_extended_theme_support($extended_theme_support = true, $checked_arg = array(), $theme_support_args = false)
 {
 	//* If array: Check if feature-option is supported by theme
 	if ( is_array($theme_support_args) ) {		
