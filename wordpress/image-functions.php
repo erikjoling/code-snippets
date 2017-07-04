@@ -1,6 +1,32 @@
 <?php
 
 /**
+ * Registers custom image sizes for the theme. 
+ *
+ * @since  1.0.0
+ * @access public
+ * @return void
+ */
+function ejo_register_image_sizes() 
+{
+	// add_image_size( 'banner', 1920, 300, true ); 
+}
+
+add_action( 'init', 'ejo_register_image_sizes', 5 );
+
+/**
+ * Add custom image sizes to media dropdown 
+ */
+function post_image_sizes($sizes)
+{
+	// $sizes['banner'] => 'Banner';
+
+    return $sizes;
+}
+
+add_filter( 'image_size_names_choose', 'post_image_sizes' );
+
+/**
  * Get all image sizes
  */
 function ejo_get_all_image_sizes()
