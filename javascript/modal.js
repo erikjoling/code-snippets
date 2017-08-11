@@ -24,17 +24,17 @@
  * - Currently only one modal is supported on a page
  */ 
 
+/* Keep track of last focussed element */
+var lastFocus;
+
+/* List all tabbable elements */
+var tabElements = 'select, input, textarea, button, a, [tabindex]';
+
 // Ready when you are
 jQuery(document).ready(function($) {
 
     // Get the modal
     var $modal = $('.modal');
-
-    /* Keep track of last focussed element */
-    var lastFocus;
-
-    /* List all tabbable elements */
-    var tabElements = 'select, input, textarea, button, a, [tabindex]';
 
     // Add close button
     $modal.append('<button class="close" aria-label="close"></button>');
