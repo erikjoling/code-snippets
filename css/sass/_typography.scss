@@ -1,0 +1,253 @@
+//////
+//
+// TYPOGRAPHY
+//
+// Description: Utitilies for font properties and line-height
+// Version:     2017-10-27
+// Author:      Erik Joling <erik@ejoweb.nl>
+//
+// Use:
+//    font-size:   font-size(1);
+//    line-height: line-height(1);
+//    font-family: font-stack(Arial);
+//    font-weight: font-weight(bold, Arial);
+//    font-style:  font-style(italic, Arial);
+//
+//    @include font-appearance(Arial, bold, italic);
+//    @include font-dimension(Arial, 1);
+//
+//    @include font(Arial, 1);
+//
+//////
+
+// 
+// DEFAULTS
+//
+
+// Font dimensions
+$base-font-size: 16 !default;
+$base-line-height: $base-font-size * 1.625 !default;
+$base-line-height-ratio: $base-line-height / $base-font-size !default;
+
+// Font appearance
+$base-font: Arial !default;
+$base-unit: rem !default;
+
+$fonts: (
+    Arial: (
+        stack: ( Arial, Helvetica, sans-serif ),
+        weights: (
+            normal: 400,
+            bold: 700
+        ),
+        styles: ( normal, italic ),
+        size-correction: 0, // optional
+    ),
+) !default;
+
+
+//
+// HELPERS
+//
+
+// Get Font from fonts
+@function get-font($id: $base-font) {
+    @if (map-has-key($fonts, $id) == false) {
+        @warn "$id #{$id} not found in $fonts";
+        @return false;
+    }
+
+    @return map-get($fonts, $id);
+}
+
+// Get Font weights from font
+@function get-font-weights($id: $base-font) {
+    $font: get-font($id);
+    
+    @if ($font == false) {
+        @return false;
+    }
+
+    @if (map-has-key($font, weights) == false) {
+        @warn "`weights` not found in $font #{$id}";
+        @return false;
+    }
+
+    @return map-get($font, weights);
+}
+
+// Get font styles
+@function get-font-styles($id: $base-font) {
+    $font: get-font($id);
+    
+    @if ($font == false) {
+        @return false;
+    }
+
+    @if (map-has-key($font, styles) == false) {
+        @warn "`styles` not found in $font #{$id}";
+        @return false;
+    }
+
+    @return map-get($font, styles);
+}
+
+// Get font-size correction
+@function get-font-size-correction($id: $base-font) {
+    $font: get-font($id);
+    
+    @if ($font == false) {
+        @return false;
+    }
+
+    @if (map-has-key($font, size-correction) == false) {
+        // No need to @warn, size-correction is optional
+        @return false;
+    }
+
+    @return map-get($font, size-correction);
+}
+
+
+//
+// APPEARANCE
+//
+
+// Returns the font-stack associated with a type
+@function get-font-stack($id: $base-font) {
+    $font: get-font($id);
+    
+    @if ($font == false) {
+        @return false;
+    }
+
+    @if (map-has-key($font, stack) == false) {
+        @warn "`stack` not found in $font #{$id}";
+        @return inherit;
+    }
+
+    @return map-get($font, stack);
+}
+
+// Returns the font-family from the 'stack' key in a Sass list
+@function get-font-weight($weight:normal, $id: $base-font) {
+    $font-weights: get-font-weights($id);
+    $font-weight-fallback: normal;
+    
+    @if ($font-weights == false) {
+        @return $font-weight-fallback;
+    }
+
+    @if (map-has-key($font-weights, $weight) == false) {
+        @warn "$weight #{$weight} not found in weights of $font #{$id}";
+        @return $font-weight-fallback;
+    }
+    
+    @return map-get($font-weights, $weight);
+}
+
+
+// Returns the font-family from the 'stack' key in a Sass list
+@function get-font-style($style: normal, $id: $base-font) {
+    $font-styles: get-font-styles($id);
+    $font-style-fallback: normal;
+    
+    @if ($font-styles == false) {
+        @return $font-style-fallback;
+    }
+    
+    // Check if $style is present in $font-styles
+    @if (index($font-styles, $style) == null) {
+        @warn "Font-style `#{$style}` not found in font `#{$id}`";
+        @return $font-style-fallback;
+    }
+
+    @return $style;
+}
+
+//
+// DIMENSIONS
+//
+
+// Line height
+@function get-line-height($size, $unit: $base-unit) {
+    $base-line-height: $size * $base-line-height-ratio;
+
+    @if ($unit == rem) {
+        @return $base-line-height * 1rem;
+    }
+    @else {
+        @return $base-line-height * $base-font-size * 1px;
+    }
+}
+
+// Get font-size from $font-dimensions
+@function get-font-size($size, $id: $base-font, $unit: $base-unit) {
+    $font-size-correction: get-font-size-correction($id);
+
+    @if ($font-size-correction == false) {
+        $font-size-correction: 0;
+    }
+
+    $font-size: $base-font-size + $font-size-correction;
+    $font-size: $font-size * $size;
+
+    @if ($unit == rem) {
+        @return rem($font-size);
+    }
+    @else {
+        @return $font-size * 1px;
+    }
+}
+
+//
+// ALIASSES for day to day use
+//
+
+// Font stack
+@function font-stack($id: $base-font) {
+    @return get-font-stack($id);
+}
+
+// Font weight
+@function font-weight($weight:normal, $id: $base-font) {
+    @return get-font-weight($weight, $id);
+}
+
+// Font style
+@function font-style($style:normal, $id: $base-font) {
+    @return get-font-style($style, $id);
+}
+
+// Font size
+@function font-size($size, $id: $base-font, $unit: $base-unit) {
+    @return get-font-size($size, $id, $unit);
+}
+
+// Line height
+@function line-height($size, $unit: $base-unit) {
+    @return get-line-height($size, $unit);
+}
+
+//
+// Utilities
+//
+
+// font-stack and weight
+@mixin font-appearance($id: $base-font, $weight: normal, $style: normal) {
+    font-family: get-font-stack($id);
+    font-weight: get-font-weight($weight, $id);  
+    font-style: get-font-style($style, $id);  
+}
+
+// font-size and line-height
+@mixin font-dimension($id, $size, $unit: $base-unit) {
+    font-size: font-size($size, $id, $unit);
+    line-height: line-height($size, $unit);
+}
+
+// All font properties
+@mixin font($id, $size: 1, $unit: $base-unit) {
+    @include font-appearance($id);
+    @include font-dimension($id, $size);
+}

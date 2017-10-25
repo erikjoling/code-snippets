@@ -1,0 +1,104 @@
+//////
+//
+// BORDERS
+//
+// Version: 2017-10-27
+// Author: Erik Joling <erik@ejoweb.nl>
+//
+// Use:
+//    border: border-width(base) border-style(base) border-color(base);
+//    border-left: border(base);
+//    border-radius: border-radius(base)
+//
+//////
+
+// 
+// DEFAULTS
+//
+$borders: (
+   base: (
+       width: 1px,
+       style: solid,
+       color: #eee,
+       radius: 5px
+   )
+) !default;
+
+// Helper function
+@function get-border($name: base) {
+
+    @if map-has-key($borders, $name) == false {
+        @warn "`#{$name}` not found in borders. Returning false";
+        @return false;
+    }
+
+    @return map-get($borders, $name);
+}
+
+// Get border width from settings
+@function border-width($name: base) {
+
+    $border: get-border($name);
+
+    @if ( $border == false OR map-has-key($border, 'width') == false ) {
+        @warn "`#{$name}` not found in borders. Returning `0`";
+        @return 0;
+    }
+
+    @return map-get($border, 'width');
+}
+
+// Get border style from settings
+@function border-style($name: base) {
+
+    $border: get-border($name);
+
+    @if ( $border == false OR map-has-key($border, 'style') == false ) {
+        @warn "Style not found in `#{$name}` (border). Returning `none`";
+        @return none;
+    }
+
+    @return map-get($border, 'style');
+}
+
+// Get border color from settings
+@function border-color($name: base) {
+
+    $border: get-border($name);
+
+    @if ( $border == false OR map-has-key($border, 'color') == false ) {
+        @warn "Color not found in `#{$name}` (border). Returning `inherit`";
+        @return inherit;
+    }
+
+    $border-color: map-get($border, 'color');
+
+    @return $border-color;
+}
+
+// Get border radius from settings
+@function border-radius($name: base) {
+
+    $border: get-border($name);
+
+    @if ( $border == false OR map-has-key($border, 'radius') == false ) {
+        @warn "Radius not found in `#{$name}` (border). Returning `0`";
+        @return 0;
+    }
+
+    @return map-get($border, 'radius');
+}
+
+//
+// Utilities
+//
+
+// Get border layout from settings
+@function border($name: base, $color: false) {
+
+    @if ( $color == false ) {
+        $color: border-color($name);
+    }
+
+    @return border-width($name) border-style($name) $color;
+}

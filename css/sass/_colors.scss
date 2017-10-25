@@ -1,0 +1,57 @@
+//////
+//
+// COLOR (PALETTE)
+//
+// Description: Utitilies for color palette
+// Version:     2017-10-27
+// Author:      Erik Joling <erik@ejoweb.nl>
+//
+// Use:
+//    color: color(white, base);
+//    background-color: color(white, dark, 0.5); // Where 0.5 is opacity
+//
+//////
+
+// 
+// DEFAULTS
+//
+$color-palette: (
+    white: (
+        base: #fff,
+        light: lighten(#fff, 10%),
+        dark: darken(#fff, 10%),
+    ),
+) !default;
+
+// Get color from a palette
+@function color($name, $variant: base, $opacity: false) 
+{
+    @if map-has-key($color-palette, $name) == false {
+        @warn "`#{$name}` not found in color-palette. Returning `inherit` as value";
+        @return inherit;
+    }
+
+    $color: map-get($color-palette, $name);
+    
+    // If specific variant isn't found, continue with base variant
+    @if map-has-key($color, $variant) == false {
+        @warn "`#{$variant}` not found in `#{$name}`. Proceding with `base` value";
+        $variant: base;
+    }
+
+    $color-variant: map-get($color, $variant);
+    
+    @if ($opacity) {
+
+        @if (type-of($opacity) == number) {
+            @if ($opacity <= 1) {
+                $color-variant: rgba($color-variant, $opacity);
+            }
+        }
+        @elseif (map-has-key($color, opacity)) {
+            $color-variant: rgba($color-variant, map-get($color, opacity));
+        }
+    }
+
+    @return $color-variant;
+}

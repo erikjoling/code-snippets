@@ -1,0 +1,41 @@
+//////
+//
+// SPACES
+//
+// Description: Utilities to keep spaces relative to font-size and consistent
+// Version:     2017-10-27
+// Author:      Erik Joling <erik@ejoweb.nl>
+//
+// Use:
+//    margin-top: v-space(1);
+//    padding-left: h-space(1);
+//
+//////
+
+$base-font-size: 16 !default;
+$vertical-space-ratio:   1.5 !default;
+$horizontal-space-ratio: $vertical-space-ratio * 1.25 !default;
+
+@function v-space($size, $unit: rem) 
+{   
+    $vertical-space: $size * $vertical-space-ratio;
+
+    @if ($unit == rem) {
+        @return $vertical-space * 1rem;
+    }
+    @else {
+        @return $vertical-space * $base-font-size * 1px;
+    }
+}
+
+@function h-space($size, $unit: rem) 
+{
+    $horizontal-space: $size * $horizontal-space-ratio;
+
+    @if ($unit == rem) {
+        @return $horizontal-space * 1rem;
+    }
+    @else {
+        @return $horizontal-space * $base-font-size * 1px;
+    }
+}

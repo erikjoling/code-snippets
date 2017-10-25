@@ -1,0 +1,88 @@
+//////
+//
+// HELPERS
+//
+// Description: Common helper functions
+// Version:     2017-10-27
+// Author:      Erik Joling <erik@ejoweb.nl>
+//
+// Use:
+//    strip-units(10px);
+//    rem(20px);
+//    em(20px);
+//    shade(#ffffff, 10%);
+//    tint(#000000, 10%);
+//
+//    a {
+//        @include on-event {
+//            [...]
+//        }
+//    }
+//
+//////
+
+$base-font-size: 16 !default;
+
+// Strip unit from value
+@function strip-units($value) {
+	@return ($value / ($value * 0 + 1));
+}
+
+// Convert pixels to rems
+// eg. for a relational value of 12px write rem(12)
+// Assumes $base-font-size is the font-size of <html>
+@function rem($pxval) 
+{
+	$base: $base-font-size;
+
+    @if not unitless($pxval) {
+        $pxval: strip-units($pxval);
+    }
+
+    @if not unitless($base) {
+        $base: strip-units($base);
+    }
+
+    @return ($pxval / $base) * 1rem;
+}
+
+// Convert pixels to em
+// eg. for a relational value of 12px write rem(12)
+// Assumes $base-font-size is the font-size of <html>
+@function em($pxval) 
+{
+    $base: $base-font-size;
+
+    @if not unitless($pxval) {
+        $pxval: strip-units($pxval);
+    }
+
+    @if not unitless($base) {
+        $base: strip-units($base);
+    }
+
+    @return ($pxval / $base) * 1em;
+}
+
+// Mixes a color with black.
+@function shade($color, $percent) {
+    @return mix(#000, $color, $percent);
+}
+
+// Mixes a color with white.
+@function tint($color, $percent) {
+    @return mix(#fff, $color, $percent);
+}
+
+// Event wrapper
+@mixin on-event($events: hover focus active ) { 
+    $selector: ();
+
+    @each $event in $events {
+        $selector: append($selector, unquote('&:#{$event}'), 'comma');
+    }
+
+    #{$selector} {
+        @content;
+    }
+}
