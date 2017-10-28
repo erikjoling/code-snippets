@@ -3,7 +3,7 @@
 // ICONS
 //
 // Description: Icon utility, currently used with font-awesome 4.7.0
-// Version:     2017-10-27
+// Version:     2017-10-28
 // Author:      Erik Joling <erik@ejoweb.nl>
 //
 // Use:
@@ -17,10 +17,11 @@
 //
 //////
 
-
 @mixin icon($icon_name: 'no-icon') {
 	display: inline-block;
 
+	font-size: inherit; // can't have font-size inherit on line above, so need to override
+	line-height: 1;
 	font-family: FontAwesome; // shortening font declaration
 	font-style: normal;
 	font-weight: normal ;
@@ -28,9 +29,6 @@
 	text-rendering: auto; // optimizelegibility throws things off #1094
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-
-	font-size: inherit; // can't have font-size inherit on line above, so need to override
-	line-height: 1;
 
 	@if $icon_name != 'no-icon' {
 		content: icon($icon_name);

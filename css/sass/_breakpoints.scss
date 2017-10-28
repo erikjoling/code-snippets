@@ -3,7 +3,7 @@
 // BREAKPOINTS
 //
 // Description: Breakpoint viewport sizes and media queries. Inspired by Twitter Bootstrap v4
-// Version:     2017-10-27
+// Version:     2017-10-28
 // Author:      Erik Joling <erik@ejoweb.nl>
 //
 // Use:
@@ -117,5 +117,12 @@ $breakpoints: (
         @include breakpoint-down($upper, $breakpoints) {
             @content;
         }
+    }
+}
+
+// Custom Breakpoint
+@mixin breakpoint-custom($min-width) {
+   @media (min-width: $min-width) {
+      @content;
     }
 }
