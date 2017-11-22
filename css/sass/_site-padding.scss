@@ -3,7 +3,7 @@
 // SITE PADDING
 //
 // Description: Add horizontal space to prevent containers sticking to side of screen
-// Version:     2017-10-27
+// Version:     2017-11-1
 // Author:      Erik Joling <erik@ejoweb.nl>
 //
 // Requires
@@ -26,7 +26,7 @@ $site-paddings: (
 ) !default;
 
 // Recursive function to get site-padding from breakpoint
-@function get-site-padding($breakpoint-name: xs) {
+@function get-site-padding($breakpoint-name: xs, $site-paddings: $site-paddings) {
 
     $site-padding: 0;
 
@@ -44,18 +44,18 @@ $site-paddings: (
 }
 
 // Wrap site-padding inside h-space()
-@function site-padding($breakpoint-name: xs) {
-    @return h-space(get-site-padding($breakpoint-name));
+@function site-padding($breakpoint-name: xs, $site-paddings: $site-paddings) {
+    @return h-space(get-site-padding($breakpoint-name, $site-paddings));
 }
 
 // Print the site-paddings for the relevant breakpoints
-@mixin site-padding() {
+@mixin site-padding($site-paddings: $site-paddings) {
 
     @each $breakpoint-name, $site-padding in $site-paddings {
         
         @include breakpoint($breakpoint-name) {
-            padding-left: site-padding($breakpoint-name);
-            padding-right: site-padding($breakpoint-name);
+            padding-left: site-padding($breakpoint-name, $site-paddings);
+            padding-right: site-padding($breakpoint-name, $site-paddings);
         }
     }
 }
