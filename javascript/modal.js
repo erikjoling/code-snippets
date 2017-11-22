@@ -1,3 +1,9 @@
+/**
+ * NOTE TO SELF: PLEASE USE A MODAL PLUGIN
+ * There are a lot of edge cases which cost a lot of time to implement.
+ * Using Magnific Popup for example saves a lot of time
+ */
+
 /** 
  * Simple Web Modal
  * - version   1.0.0

@@ -2,6 +2,8 @@
  * Smooth Scrolling for all internal links
  *
  * And remove #hash from link
+ *
+ * @require: jQuery
  */
 $('a[href^="#"]').on('click',function (e) {
     e.preventDefault();
